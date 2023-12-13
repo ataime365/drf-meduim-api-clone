@@ -87,14 +87,15 @@ WSGI_APPLICATION = "authors_api.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase.sqlite3",#BASE_DIR / "db.sqlite3",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "mydatabase.sqlite3",#BASE_DIR / "db.sqlite3",
+#     }
+# }
 
-# DATABASES = {"default": env.db("DATABASE_URL")} #This will be very relevant when we have setup our databases using docker 
+DATABASES = {"default": env.db("DATABASE_URL")} 
+#This will be very relevant when we have setup our postgres databases using docker 
 #The db method is an alias for db_url.
 
 PASSWORD_HASHERS = [
@@ -155,3 +156,20 @@ CORS_URLS_REGEX = r"^api/.*$"
 # CORS_URLS_REGEX defines which urls should have CORS settings added to the http responses
 
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(name)-12s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
+        }
+    },
+    "handlers":{
+        "console": {
+            "level": "DEBUG",
+            "class":"logging.StreamHandler",
+            "formatter": "verbose", #As defined in formatters above
+        }
+    },
+    "root": {"level": "INFO", "handlers": ["console"]}, #root logger
+}

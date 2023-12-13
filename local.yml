@@ -1,0 +1,54 @@
+version: "3.9" #docker compose file
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    volumes:
+      - .:/app:z #mapping the local directory to the /app docker directory
+      - static_volume:/app/staticfiles # : is mapping
+      - media_volume:/app/mediafiles
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    depends_on:
+      - postgres
+      - mailhog
+    command: /start #The start scripts
+    networks:
+      - authors-api #we want all our services to run on the same network
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./docker/local/postgres/Dockerfile
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data #mapping #This is where postgres stores its data by default
+      - local_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.local/.postgres
+    networks:
+      - authors-api
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: mailhog
+    ports:
+      - "8025:8025"
+    networks:
+      - authors-api
+
+
+# Let us tell compose about our network and volumes
+networks:
+  authors-api:
+    driver: bridge
+
+volumes:
+  static_volume:
+  media_volume:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
