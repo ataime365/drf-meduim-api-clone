@@ -9,8 +9,10 @@ services:
       - .:/app:z #mapping the local directory to the /app docker directory
       - static_volume:/app/staticfiles # : is mapping
       - media_volume:/app/mediafiles
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
+    expose:
+      - "8000"
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
@@ -34,10 +36,25 @@ services:
       - authors-api
 
   mailhog:
-    image: mailhog/mailhog:v1.0.0
+    image: mailhog/mailhog:v1.0.0 #using pre-built image
     container_name: mailhog
     ports:
       - "8025:8025"
+    networks:
+      - authors-api
+
+  nginx:
+    restart: always # because this is our server
+    depends_on:
+      - api
+    volumes:
+      - static_volume:/app/staticfiles # : is mapping
+      - media_volume:/app/mediafiles
+    build:
+      context: ./docker/local/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80" #Our server will now be running on port 8080
     networks:
       - authors-api
 
