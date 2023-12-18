@@ -16,7 +16,7 @@ import environ
 env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent #src level
 
 #Added
 APP_DIR = BASE_DIR / "core_apps"
@@ -155,6 +155,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_URLS_REGEX = r"^api/.*$"
 # CORS_URLS_REGEX defines which urls should have CORS settings added to the http responses
 
+# "AUTH_USER_MODEL must be of the form 'app_label.model_name'"
+AUTH_USER_MODEL = "users.User" #, the default value for AUTH_USER_MODEL is 'auth.User'. This refers to the built-in User model provided by Django's authentication framework, located in the django.contrib.auth.models module
 
 LOGGING = {
     "version": 1,
