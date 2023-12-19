@@ -21,3 +21,13 @@ your gunicorn connection will just sit there idle waiting for the data to finish
  the connection to terminate. This means that it will not be able to work on any other task (request) in the meantime.
 On the other hand, a reverse proxy like Nginx can notice that a client is superslow and put it a side while it works 
 on handling other requests. Maybe my examples are not 100% accurate but the concept is."""
+
+
+EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend" #django.core.mail.backends.console.EmailBackend
+EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
+EMAIL_PORT = env("EMAIL_PORT")
+DEFAULT_FROM_EMAIL = "ataime15@gmail.com"
+DOMAIN = env("DOMAIN")
+
+SITE_NAME = "Authors Haven"
+

@@ -19,7 +19,8 @@ services:
     depends_on:
       - postgres
       - mailhog
-    command: /start #The start scripts
+      - redis
+    command: /start #The start scripts #python manage.py runserver 0.0.0.0:8000
     networks:
       - authors-api #we want all our services to run on the same network
 
@@ -40,6 +41,48 @@ services:
     container_name: mailhog
     ports:
       - "8025:8025"
+    networks:
+      - authors-api
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - authors-api
+  
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile #This django image is actually a python environment, so it can run celery also
+    # same docker file, but the commands are different
+    command: /start-celeryworker # This is an sh file in the docker root directory. The Dockerfile copied it to the root directory  
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    depends_on:
+      - redis
+      - postgres
+      - mailhog
+    networks:
+      - authors-api
+
+  flower:
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile #python environment
+    # same dockerfile, but the commands are different
+    command: /start-flower # This is an sh file in the docker root directory. The Dockerfile copied it to the root directory 
+    volumes:
+      - flower_data:/data
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - postgres
     networks:
       - authors-api
 
@@ -69,3 +112,4 @@ volumes:
   media_volume:
   local_postgres_data: {}
   local_postgres_data_backups: {}
+  flower_data: {}

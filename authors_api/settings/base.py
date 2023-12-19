@@ -44,6 +44,7 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "drf_yasg",
     "corsheaders",
+    "djcelery_email",
     # "djoser",
     # "rest_framework_simplejwt",
 ]
@@ -157,6 +158,19 @@ CORS_URLS_REGEX = r"^api/.*$"
 
 # "AUTH_USER_MODEL must be of the form 'app_label.model_name'"
 AUTH_USER_MODEL = "users.User" #, the default value for AUTH_USER_MODEL is 'auth.User'. This refers to the built-in User model provided by Django's authentication framework, located in the django.contrib.auth.models module
+
+# Celery message broker and result
+CELERY_BROKER_URL = env("CELERY_BROKER") #Redis is our celery broker
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL #Redis url
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_RESULT_BACKEND_MAX_RETRIES = 10
+CELERY_TASK_SEND_SENT_EVENT = True #For task tracking before they are consumed by a worker
+
+if USE_TZ:
+    CELERY_TIMEZONE = TIME_ZONE
+
 
 LOGGING = {
     "version": 1,

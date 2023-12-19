@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+# In docker this file will run from the root directory
+exec watchfiles celery.__main__.main \
+    --args \
+    "-A authors_api.celery worker -l INFO"
