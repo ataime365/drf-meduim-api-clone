@@ -37,7 +37,7 @@ class Profile(TimeStampedUUIDModel):
     
     def follow(self, profile):
         """This is possible because of the ManyToManyField 'self' relationship.
-        profile here is another profile instance I want to follow """
+        profile here is another profile instance I want to follow ...... Django Abstraction"""
         self.followers.add(profile)
 
     def unfollow(self, profile):

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import environ
+from datetime import timedelta
 
 env = environ.Env()
 
@@ -45,6 +46,12 @@ THIRD_PARTY_APPS = [
     "drf_yasg",
     "corsheaders",
     "djcelery_email",
+    "rest_framework.authtoken",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
     # "djoser",
     # "rest_framework_simplejwt",
 ]
@@ -170,6 +177,54 @@ CELERY_TASK_SEND_SENT_EVENT = True #For task tracking before they are consumed b
 
 if USE_TZ:
     CELERY_TIMEZONE = TIME_ZONE
+
+
+# dj-rest-auth
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated", #This means all the endpoints will be protected by default
+    ],
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend",], # To be used by the api's
+}
+
+# drf simple jwt
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("Bearer", ),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True, #New
+    "SIGNING_KEY": env("SIGNING_KEY"),
+    "USER_ID_FIELD": "id", #This is the field that will be used to identify the user in the token
+    "USER_ID_CLAIM":"user_id", 
+    # "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    # "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+}
+
+REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_COOKIE":"authors-access-token",
+    "JWT_AUTH_REFRESH_COOKIE":"authors-refresh-token",
+    "REGISTER_SERIALIZER":# dj-rest-auth
+            "core_apps.users.serializers.CustomRegisterSerializer", #Because we want to further customize the RegisterSerializer
+}
+
+# Configuring the authentication backends
+AUTHENTICATION_BACKENDS = [
+    "allauth.account.auth_backends.AuthenticationBackend", #This is the authentication backend that comes with allauth
+    "django.contrib.auth.backends.ModelBackend", #This is the default authentication backend that comes with django
+]
+
+# Configure django allauth
+ACCOUNT_AUTHENTICATION_METHOD = "email" # This means we are going to be using email to authenticate a user
+ACCOUNT_EMAIL_REQUIRED = True #This means that an eamil would be required for signup
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True # Confirming email for a get request
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1 #1 day
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None # No username field in this application
+ACCOUNT_USERNAME_REQUIRED = False # No username field in this application
 
 
 LOGGING = {
