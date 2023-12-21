@@ -30,8 +30,8 @@ class Profile(TimeStampedUUIDModel):
     profile_photo = models.ImageField(verbose_name=_("Profile Photo"), default="/profile_default.png")
     twitter_handle = models.CharField(verbose_name=_("twitter handle"), max_length=20, blank=True)
     followers = models.ManyToManyField( #becomes a list
-        "self", symmetrical=False, related_name="profile_followers", blank=True) #symmetrical=False (Not Reciprocal) e.g follows, not friendships
-
+        "self", symmetrical=False, related_name="following", blank=True) #symmetrical=False (Not Reciprocal) e.g follows, not friendships
+#profile_followers
     def __str__(self):
         return f"{self.user.first_name}'s Profile"
     

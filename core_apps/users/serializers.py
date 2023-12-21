@@ -14,7 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
         User Model, we had to get them from the profile Model"""
     """The related_name attribute (profile)  is used to create a reverse relation from the User model to the Profile model.
       This is how you would access the Profile object associated with a given User instance."""
-    gender = serializers.CharField(source="profile.gender") #mapping and flatening
+    gender = serializers.CharField(source="profile.gender") # This is possible because of the one-to-one relationship
     phone_number = PhoneNumberField(source="profile.phone_number")
     # profile_photo = serializers.ImageField(source="profile.profile_photo")
     profile_photo = serializers.ReadOnlyField(source="profile.profile_photo.url")
