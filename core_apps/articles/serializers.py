@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from core_apps.articles.models import Article, ArticleView, Clap
-# from core_apps.bookmarks.models import Bookmark
-# from core_apps.bookmarks.serializers import BookmarkSerializer
+from core_apps.bookmarks.models import Bookmark
+from core_apps.bookmarks.serializers import BookmarkSerializer
 from core_apps.profiles.serializers import ProfileSerializer
 # from core_apps.responses.serializers import ResponseSerializer
 
@@ -34,8 +34,8 @@ class ArticleSerializer(serializers.ModelSerializer):
     tags = TagListField()
     views = serializers.SerializerMethodField()
     average_rating = serializers.ReadOnlyField() # A method under Article models
-    # bookmarks = serializers.SerializerMethodField()
-    # bookmarks_count = serializers.SerializerMethodField()
+    bookmarks = serializers.SerializerMethodField()
+    bookmarks_count = serializers.SerializerMethodField()
     claps_count = serializers.SerializerMethodField()
     # responses = ResponseSerializer(many=True, read_only=True)
     # responses_count = serializers.IntegerField(source="responses.count", read_only=True)
@@ -48,12 +48,12 @@ class ArticleSerializer(serializers.ModelSerializer):
     def get_claps_count(self, obj):
         return obj.claps.count()
 
-    # def get_bookmarks(self, obj):
-    #     bookmarks = Bookmark.objects.filter(article=obj)
-    #     return BookmarkSerializer(bookmarks, many=True).data
+    def get_bookmarks(self, obj):
+        bookmarks = Bookmark.objects.filter(article=obj) #bookmarks for an article
+        return BookmarkSerializer(bookmarks, many=True).data
 
-    # def get_bookmarks_count(self, obj):
-    #     return Bookmark.objects.filter(article=obj).count()
+    def get_bookmarks_count(self, obj):
+        return Bookmark.objects.filter(article=obj).count()
 
     def get_average_rating(self, obj):
         return obj.average_rating()
@@ -102,7 +102,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = [
             "id","title", "slug", "tags", "estimated_reading_time",
             "author_info", "views", "description", "body", "banner_image", "average_rating",
-            "claps_count","created_at", "updated_at",
+            "bookmarks","bookmarks_count","claps_count","created_at", "updated_at",
         ]
 
 
