@@ -17,7 +17,7 @@ class Clap(TimeStampedUUIDModel):
     article = models.ForeignKey("Article", on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ["user", "article"]
+        unique_together = ["user", "article"] # To ensure a user can only clap an article once
         ordering = ["-created_at"]
 
     def __str__(self):

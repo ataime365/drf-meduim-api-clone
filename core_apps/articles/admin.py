@@ -19,7 +19,7 @@ class ArticleViewAdmin(admin.ModelAdmin):
 
 
 class ClapAdmin(admin.ModelAdmin):
-    list_display = ["pkid", "id", "user", "article"]
+    list_display = ["pkid", "id", "user", "article"] #From Model
     list_display_links = ["id", "user"]
     list_filter = ["created_at", "updated_at"]
 

@@ -46,9 +46,11 @@ class ArticleSerializer(serializers.ModelSerializer):
     #     return obj.responses.count()
 
     def get_claps_count(self, obj):
+        """claps field is on the Article model"""
         return obj.claps.count()
 
     def get_bookmarks(self, obj):
+        """Bookmark field is not on the Article model, that is why we have to get it this way"""
         bookmarks = Bookmark.objects.filter(article=obj) #bookmarks for an article
         return BookmarkSerializer(bookmarks, many=True).data
 
