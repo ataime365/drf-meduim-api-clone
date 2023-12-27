@@ -3,12 +3,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from core_apps.articles.models import Article
-from core_apps.common.models import TimeStampedModel
+from core_apps.common.models import TimeStampedUUIDModel
 
 User = get_user_model()
 
 
-class Response(TimeStampedModel):
+class Response(TimeStampedUUIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="responses")
     article = models.ForeignKey(
         Article, on_delete=models.CASCADE, related_name="responses"

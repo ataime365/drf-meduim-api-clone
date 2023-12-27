@@ -2,12 +2,12 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from core_apps.articles.models import Article
-from core_apps.common.models import TimeStampedModel
+from core_apps.common.models import TimeStampedUUIDModel
 
 User = get_user_model()
 
 
-class Rating(TimeStampedModel):
+class Rating(TimeStampedUUIDModel):
     RATING_CHOICES = [
         (1, "Poor"),
         (2, "Fair"),

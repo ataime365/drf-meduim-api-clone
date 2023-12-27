@@ -53,12 +53,15 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth",
     "dj_rest_auth.registration",
     "taggit",
+    "django_elasticsearch_dsl",
+    "django_elasticsearch_dsl_drf",
     # "djoser",
     # "rest_framework_simplejwt",
 ]
 
 LOCAL_APPS =["core_apps.profiles", "core_apps.common", "core_apps.users", 
-             "core_apps.articles", "core_apps.ratings", "core_apps.bookmarks", "core_apps.responses"]
+             "core_apps.articles", "core_apps.ratings", "core_apps.bookmarks", 
+             "core_apps.responses", "core_apps.search",]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -227,6 +230,13 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True # Confirming email for a get request
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1 #1 day
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None # No username field in this application
 ACCOUNT_USERNAME_REQUIRED = False # No username field in this application
+
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": "elasticsearch:9200",   #elasticsearch container from the compose file (local.yml)
+    },
+}
 
 
 LOGGING = {

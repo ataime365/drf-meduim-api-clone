@@ -1,6 +1,15 @@
 version: "3.9" #docker compose file
 
 services:
+  elasticsearch:
+    image: elasticsearch:7.17.9
+    environment: # From dockerhub
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+    networks:
+      - authors-api
+      
   api:
     build:
       context: .
@@ -20,6 +29,7 @@ services:
       - postgres
       - mailhog
       - redis
+      - elasticsearch
     command: /start #The start scripts #python manage.py runserver 0.0.0.0:8000
     networks:
       - authors-api #we want all our services to run on the same network

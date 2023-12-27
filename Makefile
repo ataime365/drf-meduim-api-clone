@@ -55,4 +55,7 @@ isort-diff:
 isort:
 	docker compose -f local.yml exec api isort . --skip pvenv3113 --skip migrations
 
+elastic-search-index:
+	docker compose -f local.yml exec api python manage.py search_index --create
 
+# docker compose -f local.yml run --rm api python manage.py createsuperuser
