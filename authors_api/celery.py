@@ -5,7 +5,8 @@ from django.conf import settings
 
 # TODO: change this in production
 # Set the default Django settings module for the 'celery' program.
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "authors_api.settings.local")
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "authors_api.settings.local")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "authors_api.settings.production")
 
 # Celery Instance #This name 'app' will be used to refer to this instance of celery in other parts of the system
 app = Celery("authors_api")

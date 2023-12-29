@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: ./docker/local/django/Dockerfile
     volumes:
-      - .:/app:z #mapping the local directory to the /app docker directory
+      - .:/app:z #mapping the local directory to the /app docker directory #For only local development
       - static_volume:/app/staticfiles # : is mapping
       - media_volume:/app/mediafiles
     # ports:

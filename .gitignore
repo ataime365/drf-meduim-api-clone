@@ -8,6 +8,7 @@ mediafiles
 __pycache__/
 *.py[cod]
 *$py.class
+# proxy.yml
 
 # C extensions
 *.so
